@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MovieCard } from "./Movie-List-Card";
 import { Tabledata } from "./Tabledata";
 import { OrderForm } from "./orderForm";
+import { OrderedData } from "./OrderedData";
 
 export const BookForm = () => {
   const api = "https://api.jikan.moe/v4/anime/1/news";
@@ -25,6 +26,22 @@ export const BookForm = () => {
     setEmail(event.target.value);
     console.log(event);
   };
+  const getTotalTickets = () => {
+    let sum = 0;
+    let tempArr = [
+      mondayList,
+      tuesdayList,
+      wednesdayList,
+      thursdayList,
+      fridayList,
+      saturdayList,
+      sundayList,
+    ];
+    tempArr.forEach((item) => {
+      sum += item.length;
+    });
+    return sum;
+  };
 
   const insertDetail = (event) => {
     const obj = {
@@ -39,6 +56,7 @@ export const BookForm = () => {
         saturdayList,
         sundayList,
       ],
+      totalTickets: getTotalTickets(),
     };
     setOrderList([...orderList, obj]);
     setMondayList([]);
@@ -368,6 +386,24 @@ export const BookForm = () => {
           valueEmail={email}
         />
       }
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <td>Name</td>
+            <td>E-mail</td>
+            <td>Ordered tickets</td>
+          </tr>
+        </thead>
+        <tbody>
+          {orderList.map((item) => (
+            <OrderedData
+              name={item.name}
+              email={item.email}
+              total={item.totalTickets}
+            />
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
